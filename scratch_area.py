@@ -12,8 +12,8 @@ https://en.wikipedia.org/wiki/Sequence_(game)
 #%% Import libraries
 
 # GUI with tkinter
-from tkinter import Tk, Frame, Label, RAISED, Button
-# , Scale, Frame, Entry, PhotoImage, ttk, OptionMenu, StringVar
+from tkinter import Tk, Frame, Label, RAISED, Button, StringVar, OptionMenu
+# , Scale, Frame, Entry, PhotoImage, ttk, 
 
 #%% Generate deck
 
@@ -28,6 +28,7 @@ cards_hearts.extend(cards_clubs)
 deck = cards_hearts
 
 #%% Layout GUI
+
 root = Tk()
 root.title('sequence')
 root.geometry('{}x{}'.format(400, 500))
@@ -39,11 +40,36 @@ root.geometry('{}x{}'.format(400, 500))
 card_width = 50
 card_height = 70
 
-# Create frame containers for each card
-#------------
+#%% Show Red/Blue turn
+
+# Team Label
+team_lbl = Label(root, text="TEAM TURN:", font=("Arial", 14))
+team_lbl.grid(column=0, columnspan=3,row=9,sticky='W')
+
+# Define list with music mixing options
+teamTurnVar = StringVar(root)
+
+teamOptions = ['Red','Blue']
+    
+teamTurnVar.set(teamOptions[0]) # set the default option
+
+chooseTeamMenu = OptionMenu(root, teamTurnVar, *teamOptions)
+chooseTeamMenu.grid(column=0, row=10)
+
+#%% Callback to place marker from button
+
+def place_marker():
+    teamTurn = teamTurnVar.get()
+    print(teamTurn)
+    
+    return True
+
+
+#%% Create frame containers for each card
+
 frame_list = [Frame(root, bg='white', width=card_width, height=card_height, pady=2,relief=RAISED) for idx in range(rows*cols)]
 lbl_list = [Label(frame_list[idx], text=card, font=("Arial", 12),bg='White') for idx,card in enumerate(deck[:(rows*cols)])]
-btn_list = [Button(frame_list[idx], text='Place', font=("Arial", 12),bg='White') for idx in range(rows*cols)]
+btn_list = [Button(frame_list[idx], text='Place', font=("Arial", 12),bg='White',command=place_marker) for idx in range(rows*cols)]
 for row in range(rows):
     for col in range(cols):
         frame_list[row*rows+col].grid(row=row, column=col)
